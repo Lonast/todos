@@ -1,0 +1,15 @@
+.main {
+  display: flex;
+  align-items: center;
+}
+.title {
+  margin-right: auto;
+}
+.updateBtn {
+  height: 40px;
+  background-color: rgb(20, 20, 20);
+  margin-left: 10px;
+}
+.delete {
+  cursor: pointer;
+}

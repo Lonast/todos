@@ -7,6 +7,9 @@ import {
 } from "./services/mutations";
 import { useGetTodos } from "./services/queries";
 import { ITodo } from "./types/types";
+import Todo from "./components/todo/Todo";
+import { handleCreate, handleUpdate } from "./functions/functions";
+import Form from "./components/form/Form";
 
 function App() {
   const [title, setTitle] = useState<string>("");
@@ -21,69 +24,44 @@ function App() {
   const deleteTodo = useDeleteTodo();
   const createTodo = useCreateTodo();
   const updateTodo = useUpdateTodo();
+  const create = handleCreate({
+    createTodo: createTodo,
+    todos: todos,
+    title: title,
+  });
 
-  function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
-    e.preventDefault();
-    const id =
-      parseInt(todos.data![todos.data!.length - 1].id) + 1 ||
-      Date.now().toString();
-    const todo: ITodo = {
-      id: id.toString(),
-      title: title,
-      userId: 1,
-      completed: false,
-    };
-    createTodo.mutate(todo);
-  }
-
-  async function handleUpdate(e: React.FormEvent<HTMLFormElement>) {
-    e.preventDefault();
-    ref.current = {
-      ...ref.current,
-      title: updatedTitle,
-    };
-    updateTodo.mutate(ref.current);
-  }
+  const update = handleUpdate({
+    ref: ref,
+    updateTodo: updateTodo,
+    updatedTitle: updatedTitle,
+  });
 
   return (
     <div style={{ margin: "50px" }}>
-      <form onSubmit={(e) => handleSubmit(e)}>
-        <input
-          type="text"
-          value={title}
-          onChange={(e) => setTitle(e.target.value)}
-        />
-        <button type="submit">Create Todo</button>
-      </form>
+      <Form
+        handleSubmit={create}
+        title={title}
+        setTitle={setTitle}
+        text="Create Todo"
+      />
       <hr />
-      <form onSubmit={(e) => handleUpdate(e)}>
-        <input
-          type="text"
-          value={updatedTitle}
-          onChange={(e) => setUpdatedTitle(e.target.value)}
-        />
-        <button type="submit">Update Todo</button>
-      </form>
+      <Form
+        text="Update Todo"
+        handleSubmit={update}
+        title={updatedTitle}
+        setTitle={setUpdatedTitle}
+      />
       <hr />
       <div>
         {todos.data?.map((todo) => {
           return (
-            <div style={{ display: "flex" }} key={todo.id}>
-              <p
-                onClick={() => deleteTodo.mutate(todo.id)}
-                style={{ marginRight: "5px" }}
-              >
-                {todo.title}
-              </p>
-              <button
-                onClick={() => {
-                  setUpdatedTitle(todo.title);
-                  ref.current = todo;
-                }}
-              >
-                Update
-              </button>
-            </div>
+            <Todo
+              key={todo.id}
+              todo={todo}
+              refTodo={ref}
+              deleteTodo={deleteTodo}
+              setUpdatedTitle={setUpdatedTitle}
+            />
           );
         })}
       </div>
