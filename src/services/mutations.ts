@@ -1,5 +1,5 @@
-import { useMutation, useQueries } from "@tanstack/react-query";
-import { deleteTodo, createTodo, updateTodo, getTodo } from "./api";
+import { useMutation } from "@tanstack/react-query";
+import { deleteTodo, createTodo, updateTodo } from "./api";
 import { queryClient } from "../main";
 import { ITodo } from "../types/types";
 
@@ -39,15 +39,5 @@ export function useUpdateTodo() {
         await queryClient.invalidateQueries({ queryKey: ["todos"] });
       }
     },
-  });
-}
-export function useTodos(ids: (number | undefined)[] | undefined) {
-  return useQueries({
-    queries: (ids ?? []).map((id) => {
-      return {
-        queryKey: ["todo", id],
-        queryFn: () => getTodo(id!),
-      };
-    }),
   });
 }

@@ -1,6 +1,8 @@
-import React from "react";
+import React, { useRef } from "react";
 import style from "./todo.module.css";
-import { ITodo, ITodoProps } from "../../types/types";
+import { ITodoProps } from "../../types/types";
+import { handleComplete } from "../../functions/functions";
+import { useUpdateTodo } from "../../services/mutations";
 
 const Todo: React.FC<ITodoProps> = ({
   todo,
@@ -8,9 +10,25 @@ const Todo: React.FC<ITodoProps> = ({
   setUpdatedTitle,
   deleteTodo,
 }) => {
+  const refCompleted = useRef<boolean>(todo.completed);
+  const updateTodo = useUpdateTodo();
+  const complete = handleComplete({
+    ref: refTodo,
+    updateTodo: updateTodo,
+    completed: refCompleted.current,
+  });
   return (
     <div className={style.main}>
-      {/* <input type="radio" checked={todo.completed} /> */}
+      <input
+        onClick={() => {
+          refCompleted.current = !refCompleted.current;
+          refTodo.current = todo;
+          complete(refCompleted.current);
+        }}
+        onChange={() => {}}
+        type="radio"
+        checked={todo.completed}
+      />
       <p className={style.title}>{todo.title}</p>
       <span className={style.delete} onClick={() => deleteTodo.mutate(todo.id)}>
         ❌

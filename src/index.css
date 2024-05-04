@@ -29,6 +29,8 @@ body {
   justify-content: center;
   min-width: 320px;
   min-height: 100vh;
+  color: white;
+  background-color: #242424;
 }
 
 h1 {
@@ -46,6 +48,7 @@ button {
   background-color: rgb(20, 20, 20);
   cursor: pointer;
   transition: border-color 0.25s;
+  color:white;
 }
 button:hover {
   border-color: #646cff;

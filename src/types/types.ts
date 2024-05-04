@@ -23,24 +23,40 @@ export interface ITodoProps {
 }
 export interface IFormProps {
   handleSubmit: () => void;
-  title: string;
+  title?: string;
   setTitle?: React.Dispatch<React.SetStateAction<string>>;
   setUpdatedTitle?: React.Dispatch<React.SetStateAction<string>>;
+  setTodoIds?: React.Dispatch<React.SetStateAction<number[]>>;
   text: string;
 }
 
 //Functions
-export interface IHandleCreate {
+interface IHandleCreate {
   createTodo: UseMutationResult<AxiosResponse<any, any>, Error, ITodo, unknown>;
   todos: UseQueryResult<ITodo[], Error>;
   title: string;
 }
 export type THandleCreate = (props: IHandleCreate) => () => void;
 
-export interface IHandleUpdate {
+interface IHandleUpdate {
   ref: React.MutableRefObject<ITodo>;
   updatedTitle: string;
   updateTodo: UseMutationResult<AxiosResponse<any, any>, Error, ITodo, unknown>;
 }
 
 export type THandleUpdate = (props: IHandleUpdate) => () => void;
+
+interface IHandleTodos {
+  setTodoIds: React.Dispatch<React.SetStateAction<number[]>>;
+  ids: string;
+}
+export type THandleTodos = (props: IHandleTodos) => () => void;
+
+interface IHandleComplete {
+  ref: React.MutableRefObject<ITodo>;
+  completed: boolean;
+  updateTodo: UseMutationResult<AxiosResponse<any, any>, Error, ITodo, unknown>;
+}
+export type THandleComplete = (
+  props: IHandleComplete
+) => (completed: boolean) => void;
